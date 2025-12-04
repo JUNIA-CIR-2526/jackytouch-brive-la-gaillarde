@@ -10,6 +10,11 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>share</module>
+        <module>controller</module>
+        <module>model</module>
+        <module>main</module>
+        <module>view</module>
     </modules>
 
     <properties>
