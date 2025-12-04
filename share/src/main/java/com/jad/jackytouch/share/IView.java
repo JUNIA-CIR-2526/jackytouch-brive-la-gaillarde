@@ -1,5 +1,6 @@
 package com.jad.jackytouch.share;
 
 public interface IView {
-    void displayCar(String car);
+   
+    void display(char[][] car, String[] report);
 }

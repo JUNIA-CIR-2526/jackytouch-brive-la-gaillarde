@@ -2,42 +2,102 @@ package com.jad.jackytouch.model;
 
 import com.jad.jackytouch.share.IModel;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.net.URL;
+import java.util.List;
 
 public class Model implements IModel {
+    private BaseCar baseCar;
 
-    public String getCar() {
+    private Spoiler spoiler;
+    private Neon neon;
+    private Rims rims;
+    private Exhaust exhaust;
 
-        StringBuilder content = new StringBuilder();
 
-        URL resourceUrl = getClass().getResource("ressources/car_base.txt");
+    private boolean hasNeon = false;
+    private boolean hasRims = false;
+    private boolean hasExhaust = false;
+    private boolean hasSpoiler = false;
 
-        if (resourceUrl == null) {
-            return "Erreur : Fichier car_base.txt introuvable dans le classpath.";
+    public Model() {
+        this.baseCar = new BaseCar();
+
+
+        this.spoiler = new Spoiler(null);
+        this.neon = new Neon(null);
+        this.rims = new Rims(null);
+        this.exhaust = new Exhaust(null);
+    }
+
+
+    private Car buildCarChain() {
+        Car c = this.baseCar;
+        if (hasSpoiler) {
+            spoiler.setCar(c);
+            c = spoiler;
         }
-
-        try {
-
-            File file = new File(resourceUrl.toURI());
-
-
-            try (FileReader fileReader = new FileReader(file);
-                 BufferedReader reader = new BufferedReader(fileReader)) {
-
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    content.append(line).append("\n");
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Erreur lors de la lecture du fichier : " + e.getMessage();
+        if (hasNeon) {
+            neon.setCar(c);
+            c = neon;
         }
+        if (hasRims) {
+            rims.setCar(c);
+            c = rims;
+        }
+        if (hasExhaust) {
+            exhaust.setCar(c);
+            c = exhaust;
+        }
+        return c;
+    }
 
-        return content.toString();
+    @Override
+    public char[][] getCarLooks() {
+        return this.buildCarChain().getLooks();
+    }
+
+    @Override
+    public String[] getCarReport() {
+        List<String> report = this.buildCarChain().getReport();
+        return report.toArray(new String[0]);
+    }
+
+    @Override
+    public void addSpoiler() {
+        this.hasSpoiler = !this.hasSpoiler;
+    }
+
+    @Override
+    public void addNeon() {
+        this.hasNeon = !this.hasNeon;
+    }
+
+    @Override
+    public void addRims() {
+        this.hasRims = !this.hasRims;
+    }
+
+    @Override
+    public void addExhaust() {
+        this.hasExhaust = !this.hasExhaust;
+    }
+
+    @Override
+    public void toggleSpoilerBehavior() {
+        this.spoiler.nextBehavior();
+    }
+
+    @Override
+    public void toggleNeonBehavior() {
+        this.neon.nextBehavior();
+    }
+
+    @Override
+    public void toggleRimsBehavior() {
+        this.rims.nextBehavior();
+    }
+
+    @Override
+    public void toggleExhaustBehavior() {
+        this.exhaust.nextBehavior();
     }
 }
-
