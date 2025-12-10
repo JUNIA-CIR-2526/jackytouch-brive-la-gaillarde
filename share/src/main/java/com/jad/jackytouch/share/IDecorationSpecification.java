@@ -1,5 +1,5 @@
 package com.jad.jackytouch.share;
 
-public interface IBehavior {
+public interface IDecorationSpecification {
     String getDescription();
 }

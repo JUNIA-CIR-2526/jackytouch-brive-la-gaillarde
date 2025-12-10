@@ -1,103 +1,35 @@
 package com.jad.jackytouch.model;
 
+import com.jad.jackytouch.share.ICar;
+import com.jad.jackytouch.share.IDecorationSpecification;
 import com.jad.jackytouch.share.IModel;
 
-import java.util.List;
-
 public class Model implements IModel {
-    private BaseCar baseCar;
 
-    private Spoiler spoiler;
-    private Neon neon;
-    private Rims rims;
-    private Exhaust exhaust;
-
-
-    private boolean hasNeon = false;
-    private boolean hasRims = false;
-    private boolean hasExhaust = false;
-    private boolean hasSpoiler = false;
-
-    public Model() {
-        this.baseCar = new BaseCar();
-
-
-        this.spoiler = new Spoiler(null);
-        this.neon = new Neon(null);
-        this.rims = new Rims(null);
-        this.exhaust = new Exhaust(null);
+    @Override
+    public ICar makeCar() {
+        return new Car();
     }
 
-
-    private Car buildCarChain() {
-        Car c = this.baseCar;
-        if (hasSpoiler) {
-            spoiler.setCar(c);
-            c = spoiler;
+    @Override
+    public void addDecorator(ICar car, String tuning) {
+        switch (tuning) {
+            case "Neon" -> car.decorate(new Neon());
+            case "Rims" -> car.decorate(new Rims());
+            case "Exhaust" -> car.decorate(new Exhaust());
+            case "Spoiler" -> car.decorate(new Spoiler());
         }
-        if (hasNeon) {
-            neon.setCar(c);
-            c = neon;
-        }
-        if (hasRims) {
-            rims.setCar(c);
-            c = rims;
-        }
-        if (hasExhaust) {
-            exhaust.setCar(c);
-            c = exhaust;
-        }
-        return c;
     }
 
     @Override
-    public char[][] getCarLooks() {
-        return this.buildCarChain().getLooks();
-    }
-
-    @Override
-    public String[] getCarReport() {
-        List<String> report = this.buildCarChain().getReport();
-        return report.toArray(new String[0]);
-    }
-
-    @Override
-    public void addSpoiler() {
-        this.hasSpoiler = !this.hasSpoiler;
-    }
-
-    @Override
-    public void addNeon() {
-        this.hasNeon = !this.hasNeon;
-    }
-
-    @Override
-    public void addRims() {
-        this.hasRims = !this.hasRims;
-    }
-
-    @Override
-    public void addExhaust() {
-        this.hasExhaust = !this.hasExhaust;
-    }
-
-    @Override
-    public void toggleSpoilerBehavior() {
-        this.spoiler.nextBehavior();
-    }
-
-    @Override
-    public void toggleNeonBehavior() {
-        this.neon.nextBehavior();
-    }
-
-    @Override
-    public void toggleRimsBehavior() {
-        this.rims.nextBehavior();
-    }
-
-    @Override
-    public void toggleExhaustBehavior() {
-        this.exhaust.nextBehavior();
+    public IDecorationSpecification getSpecification(String name) {
+        return switch (name) {
+            case "RandomLight" -> new DecoratorSpecificationRandomLight();
+            case "Sport" -> new DecorationSpecificationSport();
+            case "Improved Acceleration" -> new DecorationSpecificationImprovedAcceleration();
+            case "ReducedMaxSpeed" -> new DecorationSpecificationReducedMaxSpeed();
+            case "Stability increased" -> new DecorationSpecificationStabilityIncreased();
+            default -> new NoEffect();
+        };
     }
 }

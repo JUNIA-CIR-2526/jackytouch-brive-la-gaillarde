@@ -12,21 +12,8 @@ public class Main {
 
         IModel model = new Model();
         IView view = new View();
-        IController controller = new Controller();
-        controller.setModel(model);
-        controller.setView(view);
+        Controller controller = new Controller(view, model);
+        controller.proceed();
 
-        controller.proceed();
-        controller.toggleSpoiler();
-        controller.nextSpoilerMode();
-        controller.proceed();
-        controller.toggleNeon();
-        controller.proceed();
-        controller.toggleRims();
-        controller.nextRimsMode();
-        controller.nextRimsMode();
-        controller.proceed();
-        controller.toggleExhaust();
-        controller.proceed();
     }
 }

@@ -1,23 +1,24 @@
 package com.jad.jackytouch.view;
 
+import com.jad.jackytouch.share.ICar;
 import com.jad.jackytouch.share.IView;
+import java.util.List;
 
 public class View implements IView {
     @Override
-    public void display(char[][] car, String[] report) {
+    public void displayCar(ICar car) {
+        char[][] looks = car.getLooks();
+        List<String> report = car.getReport();
 
-        for (char[] row : car) {
-            for (char c : row) {
-                System.out.print(c);
-            }
-            System.out.println();
+        System.out.println("\n--- VOITURE ---");
+        for (char[] row : looks) {
+            System.out.println(new String(row));
         }
 
-
-        System.out.println("\n-----------------");
+        System.out.println("\n--- REGLAGES ---");
         for (String line : report) {
-            System.out.println("> " + line);
+            System.out.println(line);
         }
-        System.out.println("-----------------------\n");
+        System.out.println("-----------------------");
     }
 }

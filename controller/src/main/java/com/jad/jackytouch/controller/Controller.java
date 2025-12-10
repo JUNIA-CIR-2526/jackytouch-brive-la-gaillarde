@@ -1,5 +1,6 @@
 package com.jad.jackytouch.controller;
 
+import com.jad.jackytouch.share.ICar;
 import com.jad.jackytouch.share.IController;
 import com.jad.jackytouch.share.IModel;
 import com.jad.jackytouch.share.IView;
@@ -8,68 +9,39 @@ public class Controller implements IController {
     private IView view;
     private IModel model;
 
-    @Override
-    public void setModel(IModel model) {
+    public Controller(IView view, IModel model) {
+        this.view = view;
         this.model = model;
     }
 
     @Override
-    public void setView(IView view) {
-        this.view = view;
-    }
-
-    @Override
     public void proceed() {
-
-        updateView();
+        ICar car = this.model.makeCar();
+        this.view.displayCar(car);
+        this.addAllTuning(car);
+        this.changeSpecification(car);
     }
 
-
-    @Override
-    public void toggleSpoiler() {
-        this.model.addSpoiler();
+    private void addAllTuning(ICar car) {
+      String[] tunings ={"Neon", "Rims", "Exhaust", "Spoiler"};
+      for (String tuning : tunings) {
+          this.model.addDecorator(car, tuning);
+          this.view.displayCar(car);
+      }
 
     }
+    private void changeSpecification(final ICar car) {
+        car.changeSpecificationOfTo("Neon", this.model.getSpecification("RandomLight"));
+        this.view.displayCar(car);
+        car.changeSpecificationOfTo("Exhaust", this.model.getSpecification("Sport"));
+        this.view.displayCar(car);
+        car.changeSpecificationOfTo("Rims", this.model.getSpecification("Improved Acceleration"));
+        this.view.displayCar(car);
+        car.changeSpecificationOfTo("Spoiler", this.model.getSpecification("ReducedMaxSpeed"));
+        this.view.displayCar(car);
+        car.changeSpecificationOfTo("Spoiler", this.model.getSpecification("Stability increased"));
+        this.view.displayCar(car);
 
-    @Override
-    public void toggleNeon() {
-        this.model.addNeon();
-    }
-
-    @Override
-    public void toggleRims() {
-        this.model.addRims();
-    }
-
-    @Override
-    public void toggleExhaust() {
-        this.model.addExhaust();
-    }
-
-    @Override
-    public void nextSpoilerMode() {
-        this.model.toggleSpoilerBehavior();
-    }
-
-    @Override
-    public void nextNeonMode() {
-        this.model.toggleNeonBehavior();
-    }
-
-    @Override
-    public void nextRimsMode() {
-        this.model.toggleRimsBehavior();
-    }
-
-    @Override
-    public void nextExhaustMode() {
-        this.model.toggleExhaustBehavior();
-    }
-
-
-    private void updateView() {
-
-        this.view.display(this.model.getCarLooks(), this.model.getCarReport());
 
     }
 }
